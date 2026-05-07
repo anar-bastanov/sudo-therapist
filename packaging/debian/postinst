@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+if command -v pam-auth-update >/dev/null 2>&1; then
+    pam-auth-update --package || true
+fi
+
+exit 0

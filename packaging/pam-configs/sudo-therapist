@@ -1,0 +1,9 @@
+Name: Sudo Therapist
+Default: no
+Priority: 900
+Auth-Type: Additional
+Auth:
+    requisite pam_sudo_therapist.so conf=/etc/sudo-therapist.conf
+Account-Type: Additional
+Account:
+    required pam_sudo_therapist.so conf=/etc/sudo-therapist.conf

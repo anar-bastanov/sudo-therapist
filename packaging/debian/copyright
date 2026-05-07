@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: sudo-therapist
+Source: https://github.com/anar-bastanov/sudo-therapist
+
+Files: *
+Copyright: 2026 Anar Bastanov
+License: MIT

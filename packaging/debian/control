@@ -1,0 +1,12 @@
+Source: sudo-therapist
+Section: admin
+Priority: optional
+Maintainer: Anar Bastanov anar.bastanov.out@gmail.com
+Build-Depends: debhelper-compat (= 13), cmake, gcc, libpam0g-dev
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: sudo-therapist
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Adds extra print messages for sudo via PAM
