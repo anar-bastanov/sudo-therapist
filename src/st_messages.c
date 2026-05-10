@@ -12,13 +12,4 @@ const st_message_t st_messages[] =
     { "This is not emotional regulation. This is root." }
 };
 
-const st_prompt_t st_prompts[] =
-{
-    { "Do you feel like root today?" },
-    { "Are you really really sure?" },
-    { "Do you like being in control?" }
-};
-
 const size_t st_message_count = sizeof st_messages / sizeof *st_messages;
-
-const size_t st_prompt_count = sizeof st_prompts / sizeof *st_prompts;

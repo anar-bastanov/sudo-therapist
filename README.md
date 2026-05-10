@@ -104,7 +104,6 @@ sudo -k ls
 Edit `/etc/sudo-therapist.conf` with these options:
 
 * `group`: apply only to this group; empty for all groups (default: all)
-* `prompt_chance`: interactive prompt every this many messages; 0 for never, 1 for always, and >1 for random chance (default: 5)
 
 ### Group option example
 

@@ -1,33 +1,10 @@
 #include <ctype.h>
-#include <errno.h>
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "st_config.h"
 #include "st_util.h"
-
-static void st_parse_uint(const char *value, int *out)
-{
-    if (!value || !*value)
-        return;
-
-    errno = 0;
-    char *end = NULL;
-    long res = strtol(value, &end, 10);
-
-    if (errno)
-        return;
-
-    while (*end && isspace((unsigned char)*end))
-        ++end;
-
-    if (*end || res < 0 || res > INT_MAX)
-        return;
-
-    *out = (int)res;
-}
 
 static void st_set_str(char *dst, size_t dstsz, const char *src)
 {
@@ -49,17 +26,12 @@ static void st_apply_kv(st_config_t *config, const char *key, const char *value)
         st_set_str(config->config_path, sizeof config->config_path, value);
     else if (!strcmp(key, "group"))
         st_set_str(config->group, sizeof config->group, value);
-    else if (!strcmp(key, "prompt_chance"))
-        st_parse_uint(value, &config->prompt_chance);
 }
 
 static void st_config_defaults(st_config_t *config)
 {
     snprintf(config->config_path, sizeof config->config_path, "/etc/sudo-gambit.conf");
-
     config->group[0] = 0;
-
-    config->prompt_chance = 5;
 }
 
 static void st_config_load_file(st_config_t *config, const char *path)
