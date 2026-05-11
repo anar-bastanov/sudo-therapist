@@ -1,7 +1,11 @@
 #include <ctype.h>
+#include <errno.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 
 #include "st_color.h"
 #include "st_config.h"
@@ -21,6 +25,21 @@ static void st_set_str(char *dst, size_t dstsz, const char *src)
     snprintf(dst, dstsz, "%s", src);
 }
 
+static bool st_parse_uint8(const char *s, const char **end, uint8_t *out)
+{
+    errno = 0;
+
+    char *next;
+    long v = strtol(s, &next, 10);
+
+    if (errno == ERANGE || next == s || v < 0 || v > 255)
+        return false;
+
+    *out = (uint8_t)v;
+    *end = next;
+    return true;
+}
+
 static void st_parse_color(const char *value, st_color_t *out)
 {
     out->type = ST_COLOR_DEFAULT;
@@ -30,17 +49,21 @@ static void st_parse_color(const char *value, st_color_t *out)
 
     if (*value == '#')
     {
+        if (strlen(value) != 7)
+            return;
+
+        errno = 0;
+
         char *endptr;
         unsigned long hex = strtoul(value + 1, &endptr, 16);
 
-        if (!*endptr && endptr - value == 7)
-        {
-            out->type = ST_COLOR_RGB;
-            out->r = (uint8_t)((hex >> 16) & 0xFF);
-            out->g = (uint8_t)((hex >>  8) & 0xFF);
-            out->b = (uint8_t)((hex >>  0) & 0xFF);
-        }
+        if (errno == ERANGE || endptr != value + 7)
+            return;
 
+        out->type = ST_COLOR_RGB;
+        out->r = (uint8_t)((hex >> 16) & 0xFF);
+        out->g = (uint8_t)((hex >>  8) & 0xFF);
+        out->b = (uint8_t)((hex >>  0) & 0xFF);
         return;
     }
 
@@ -54,45 +77,51 @@ static void st_parse_color(const char *value, st_color_t *out)
         return;
     }
 
-    char *next;
-    long v1 = strtol(value, &next, 10);
+    const char *p = value;
 
-    if (next == value)
+    uint8_t v1;
+
+    if (!st_parse_uint8(p, &p, &v1))
         return;
 
-    if (!*next)
+    if (!*p)
     {
-        if (v1 >= 0 && v1 <= 255)
-        {
-            out->type = ST_COLOR_INDEXED;
-            out->index = (uint8_t)v1;
-        }
-
+        out->type = ST_COLOR_INDEXED;
+        out->index = v1;
         return;
     }
 
-    if (*next == ',' || *next == ';')
-    {
-        char *p2 = next + 1;
-        long v2 = strtol(p2, &next, 10);
+    p = st_skip_spaces(p);
 
-        if (next != p2 && (*next == ',' || *next == ';'))
-        {
-            char *p3 = next + 1;
-            long v3 = strtol(p3, &next, 10);
+    if (*p != ',' && *p != ';')
+        return;
 
-            if (next != p3 && !*next)
-            {
-                if (v1 >= 0 && v1 <= 255 && v2 >= 0 && v2 <= 255 && v3 >= 0 && v3 <= 255)
-                {
-                    out->type = ST_COLOR_RGB;
-                    out->r = (uint8_t)v1;
-                    out->g = (uint8_t)v2;
-                    out->b = (uint8_t)v3;
-                }
-            }
-        }
-    }
+    p = st_skip_spaces(p + 1);
+
+    uint8_t v2;
+
+    if (!st_parse_uint8(p, &p, &v2))
+        return;
+
+    p = st_skip_spaces(p);
+
+    if (*p != ',' && *p != ';')
+        return;
+
+    p = st_skip_spaces(p + 1);
+
+    uint8_t v3;
+
+    if (!st_parse_uint8(p, &p, &v3))
+        return;
+
+    if (*p)
+        return;
+
+    out->type = ST_COLOR_RGB;
+    out->r = v1;
+    out->g = v2;
+    out->b = v3;
 }
 
 static void st_apply_kv(st_config_t *config, const char *key, const char *value)

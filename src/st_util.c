@@ -61,16 +61,20 @@ bool st_user_in_group(const char *user, const char *group)
     return false;
 }
 
+char *st_skip_spaces(const char *s)
+{
+    while (isspace((unsigned char)*s))
+        ++s;
+
+    return (char *)s;
+}
+
 void st_trim(char *s)
 {
     if (!s)
         return;
 
-    char *p = s;
-
-    while (isspace((unsigned char)*p))
-        ++p;
-
+    char *p = st_skip_spaces(s);
     size_t n = strlen(p);
 
     while (n && isspace((unsigned char)p[n - 1]))

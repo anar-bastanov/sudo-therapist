@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define ST_MAX_ANSI_COLOR_CODE_LENGTH 64
+#define ST_MAX_ANSI_COLOR_CODE_LENGTH 32
 
 typedef struct st_color
 {
