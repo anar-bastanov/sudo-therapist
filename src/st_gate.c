@@ -25,7 +25,7 @@ static const struct pam_conv *st_get_conv(pam_handle_t *pamh)
     return conv && conv->conv ? conv : NULL;
 }
 
-static void st_format_message(char *out_line, st_message_t message, const st_config_t *config)
+static void st_format_message(char *out_line, const char *message, const st_config_t *config)
 {
     char tag_fg_set[ST_MAX_ANSI_COLOR_CODE_LENGTH], tag_fg_reset[ST_MAX_ANSI_COLOR_CODE_LENGTH];
     char tag_bg_set[ST_MAX_ANSI_COLOR_CODE_LENGTH], tag_bg_reset[ST_MAX_ANSI_COLOR_CODE_LENGTH];
@@ -45,7 +45,7 @@ static void st_format_message(char *out_line, st_message_t message, const st_con
         tag_fg_set, tag_bg_set,
         tag_fg_reset, tag_bg_reset,
         text_fg_set, text_bg_set,
-        message.line,
+        message,
         text_fg_reset, text_bg_reset);
 }
 
@@ -58,7 +58,7 @@ int st_gate_run(pam_handle_t *pamh, const st_config_t *config)
 
     char line[ST_MAX_LINE_LENGTH];
     int message_i = st_rand_u32() % st_message_count;
-    st_message_t message = st_messages[message_i];
+    const char *message = st_messages[message_i];
     st_format_message(line, message, config);
 
     struct pam_message pam_message =
