@@ -49,6 +49,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(pam_sudo_therapist SHARED
     src/pam_sudo_therapist.c
+    src/st_color.c
     src/st_config.c
     src/st_gate.c
     src/st_messages.c

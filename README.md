@@ -104,6 +104,10 @@ sudo -k ls
 Edit `/etc/sudo-therapist.conf` with these options:
 
 * `group`: apply only to this group; empty for all groups (default: all)
+* `tag_color`: The text color for the `[therapist]` prefix
+* `tag_background`: The background color for the `[therapist]` prefix
+* `text_color`: The text color for the message content
+* `text_background`: The background color for the message content
 
 ### Group option example
 
