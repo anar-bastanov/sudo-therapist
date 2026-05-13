@@ -10,6 +10,7 @@ mkdir -p "$WORK"
 
 rsync -a \
   --exclude '.git' \
+  --exclude 'dump' \
   --exclude 'build' \
   --exclude 'dist' \
   "$ROOT/" "$WORK/"
