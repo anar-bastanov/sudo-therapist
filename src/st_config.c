@@ -142,9 +142,9 @@ static void st_apply_kv(st_config_t *config, const char *key, const char *value)
 
 static void st_config_defaults(st_config_t *config)
 {
-    memset(config, 0, sizeof config);
+    memset(config, 0, sizeof *config);
 
-    snprintf(config->config_path, sizeof config->config_path, "/etc/sudo-gambit.conf");
+    snprintf(config->config_path, sizeof config->config_path, "/etc/sudo-therapist.conf");
     config->group[0] = 0;
     config->tag_color.type = ST_COLOR_DEFAULT;
     config->tag_background.type = ST_COLOR_DEFAULT;
