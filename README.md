@@ -2,9 +2,7 @@
 
 `sudo-therapist` inserts extra messages into the authentication flow of `sudo` with PAM. When a password prompt appears and credentials are verified successfully, the user must confront their therapist before the privileged command proceeds.
 
-<!-- TODO:
-Insert preview GIF/PNG here
--->
+![Preview](res/preview.png)
 
 > [!WARNING]
 > This project is for experimentation and humor. All authentication decisions remain enforced by `sudo`.

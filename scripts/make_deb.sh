@@ -10,9 +10,10 @@ mkdir -p "$WORK"
 
 rsync -a \
   --exclude '.git' \
-  --exclude 'dump' \
   --exclude 'build' \
   --exclude 'dist' \
+  --exclude 'dump' \
+  --exclude 'res' \
   "$ROOT/" "$WORK/"
 
 cp -a "$WORK/packaging/debian" "$WORK/debian"
